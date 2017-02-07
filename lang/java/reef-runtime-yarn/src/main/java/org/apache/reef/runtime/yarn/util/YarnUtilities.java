@@ -22,9 +22,9 @@ import org.apache.hadoop.yarn.api.ApplicationConstants;
 import org.apache.hadoop.yarn.api.records.ApplicationAttemptId;
 import org.apache.hadoop.yarn.api.records.ApplicationId;
 import org.apache.hadoop.yarn.api.records.ContainerId;
+import org.apache.hadoop.yarn.conf.YarnConfiguration;
 import org.apache.hadoop.yarn.util.ConverterUtils;
 import org.apache.reef.annotations.audience.Private;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,6 +35,19 @@ import java.util.logging.Logger;
 public final class YarnUtilities {
   public static final String REEF_YARN_APPLICATION_ID_ENV_VAR = "REEF_YARN_APPLICATION_ID";
   private static final Logger LOG = Logger.getLogger(YarnUtilities.class.getName());
+  
+  /**
+   */
+  public static void setDefaultFS(final YarnConfiguration conf) {
+    try {
+      //String endpoint = Files.readAllLines(Paths.get("endpoint.txt"), StandardCharsets.US_ASCII).get(0);
+      //System.out.println(endpoint);
+      conf.set("fs.defaultFS", "adl://kobo03tsperfmain.caboaccountdogfood.net");
+    } catch (final Exception e) {
+      System.out.println("fail to read endpoint.txt");
+      e.printStackTrace();
+    }
+  }
 
   /**
    * @return the Container ID of the running Container.

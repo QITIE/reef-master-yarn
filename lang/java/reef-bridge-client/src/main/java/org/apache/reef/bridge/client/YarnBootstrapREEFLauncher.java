@@ -39,6 +39,7 @@ public final class YarnBootstrapREEFLauncher {
   private static final Logger LOG = Logger.getLogger(YarnBootstrapREEFLauncher.class.getName());
 
   public static void main(final String[] args) throws IOException, InjectionException {
+    LOG.setLevel(Level.FINE);
     LOG.log(Level.INFO, "Entering BootstrapLauncher.main().");
 
     if (args.length != 2) {
@@ -50,6 +51,8 @@ public final class YarnBootstrapREEFLauncher {
       }
 
       sb.append("]");
+
+      LOG.log(Level.INFO, sb.toString());
 
       final String message = "Bootstrap launcher should have two configuration file inputs, one specifying the" +
           " application submission parameters to be deserialized and the other specifying the job" +

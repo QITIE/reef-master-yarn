@@ -53,7 +53,7 @@ namespace Org {
               ManagedLog::LOGGER->LogStart("EvaluatorRequestorClr2Java::Submit");
               JNIEnv *env = RetrieveEnv(_jvm);
               jclass jclassEvaluatorRequestor = env->GetObjectClass(_jobjectEvaluatorRequestor);
-              jmethodID jmidSubmit = env->GetMethodID(jclassEvaluatorRequestor, "submit", "(IIILjava/lang/String;Ljava/lang/String;)V");
+              jmethodID jmidSubmit = env->GetMethodID(jclassEvaluatorRequestor, "submit", "(IIILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 
               if (jmidSubmit == NULL) {
                 fprintf(stdout, " jmidSubmit is NULL\n");
@@ -67,6 +67,7 @@ namespace Org {
                 request->MemoryMegaBytes,
                 request->VirtualCore,
                 JavaStringFromManagedString(env, request->Rack),
+				JavaStringFromManagedString(env, request->NodeName),
                 JavaStringFromManagedString(env, request->RuntimeName));
               ManagedLog::LOGGER->LogStop("EvaluatorRequestorClr2Java::Submit");
             }

@@ -58,10 +58,12 @@ public final class HelloDriver {
     @Override
     public void onNext(final StartTime startTime) {
       HelloDriver.this.requestor.newRequest()
-          .setNumber(1)
-          .setMemory(64)
-          .setNumberOfCores(1)
-          .submit();
+        .setNumber(4)
+        .setMemory(128)
+        .addNodeName("db5sch101130711")
+        .addNodeName("db5sch101130617")
+        .setNumberOfCores(4)
+        .submit();
       LOG.log(Level.INFO, "Requested Evaluator.");
     }
   }

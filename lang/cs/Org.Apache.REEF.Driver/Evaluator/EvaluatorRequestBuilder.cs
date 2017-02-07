@@ -24,6 +24,7 @@ namespace Org.Apache.REEF.Driver.Evaluator
     {
         private string _evaluatorBatchId;
         private string _rackName;
+        private string _nodeName;
         private string _runtimeName;
 
         internal EvaluatorRequestBuilder(IEvaluatorRequest request)
@@ -33,6 +34,7 @@ namespace Org.Apache.REEF.Driver.Evaluator
             VirtualCore = request.VirtualCore;
             _evaluatorBatchId = request.EvaluatorBatchId;
             _rackName = request.Rack;
+            _nodeName = request.NodeName;
             _runtimeName = request.RuntimeName;
         }
 
@@ -44,6 +46,7 @@ namespace Org.Apache.REEF.Driver.Evaluator
             _rackName = string.Empty;
             _evaluatorBatchId = Guid.NewGuid().ToString("N");
             _runtimeName = string.Empty;
+            _nodeName = string.Empty;
         }
 
         public int Number { get; private set; }
@@ -95,6 +98,17 @@ namespace Org.Apache.REEF.Driver.Evaluator
         }
 
         /// <summary>
+        /// Set the node name to do the request for.
+        /// </summary>
+        /// <param name="nodeName"></param>
+        /// <returns>this</returns>
+        public EvaluatorRequestBuilder SetNodeName(string nodeName)
+        {
+            _nodeName = nodeName;
+            return this;
+        }
+
+        /// <summary>
         /// Sets the batch ID for requested evaluators in the same request. The batch of Evaluators requested in the 
         /// same request will have the same Evaluator Batch ID.
         /// </summary>
@@ -122,7 +136,7 @@ namespace Org.Apache.REEF.Driver.Evaluator
         /// <returns></returns>
         public IEvaluatorRequest Build()
         {
-            return new EvaluatorRequest(Number, MegaBytes, VirtualCore, rack: _rackName, evaluatorBatchId: _evaluatorBatchId, runtimeName: _runtimeName);
+            return new EvaluatorRequest(Number, MegaBytes, VirtualCore, rack: _rackName, evaluatorBatchId: _evaluatorBatchId, runtimeName: _runtimeName, nodeName: _nodeName);
         }
     }
 }

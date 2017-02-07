@@ -41,6 +41,7 @@ import org.apache.reef.runtime.common.driver.resourcemanager.RuntimeStatusEventI
 import org.apache.reef.runtime.common.files.REEFFileNames;
 import org.apache.reef.runtime.yarn.driver.parameters.JobSubmissionDirectory;
 import org.apache.reef.runtime.yarn.driver.parameters.YarnHeartbeatPeriod;
+import org.apache.reef.runtime.yarn.util.YarnUtilities;
 import org.apache.reef.tang.InjectionFuture;
 import org.apache.reef.tang.annotations.Parameter;
 import org.apache.reef.util.Optional;
@@ -111,7 +112,7 @@ final class YarnContainerManager
     this.jobSubmissionDirectory = jobSubmissionDirectory;
     this.reefFileNames = reefFileNames;
     this.progressProvider = progressProvider;
-
+    LOG.setLevel(Level.ALL);
     LOG.log(Level.FINEST, "Instantiated YarnContainerManager");
   }
 
@@ -299,6 +300,7 @@ final class YarnContainerManager
    * This method is called from DriverRuntimeStartHandler via YARNRuntimeStartHandler.
    */
   void onStart() {
+    YarnUtilities.setDefaultFS(this.yarnConf);
     this.resourceManager.init(this.yarnConf);
     this.resourceManager.start();
 

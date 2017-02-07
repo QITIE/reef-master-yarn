@@ -19,6 +19,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Org.Apache.REEF.Tang.Annotations;
+using System.Net;
 
 namespace Org.Apache.REEF.Client.YARN.RestClient
 {
@@ -35,6 +36,8 @@ namespace Org.Apache.REEF.Client.YARN.RestClient
             _httpClient = new System.Net.Http.HttpClient(
                 new HttpClientRetryHandler(new WebRequestHandler { Credentials = yarnRestClientCredential.Credentials }),
                 disposeHandler: false);
+
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
         }
 
         public async Task<HttpResponseMessage> GetAsync(string requestResource, CancellationToken cancellationToken)

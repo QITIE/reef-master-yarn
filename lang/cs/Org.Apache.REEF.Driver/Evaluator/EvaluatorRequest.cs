@@ -52,17 +52,23 @@ namespace Org.Apache.REEF.Driver.Evaluator
         }
 
         internal EvaluatorRequest(int number, int megaBytes, int core, string rack, string evaluatorBatchId)
-            : this(number, megaBytes, core, rack, evaluatorBatchId, string.Empty)
+            : this(number, megaBytes, core, rack, string.Empty, evaluatorBatchId, string.Empty)
 
         {
         }
 
         internal EvaluatorRequest(int number, int megaBytes, int core, string rack, string evaluatorBatchId, string runtimeName)
+        : this(number, megaBytes, core, rack, evaluatorBatchId, runtimeName, string.Empty)
+        {
+        }
+
+        internal EvaluatorRequest(int number, int megaBytes, int core, string rack, string evaluatorBatchId, string runtimeName, string nodeName)
         {
             Number = number;
             MemoryMegaBytes = megaBytes;
             VirtualCore = core;
             Rack = rack;
+            NodeName = nodeName;
             EvaluatorBatchId = evaluatorBatchId;
             RuntimeName = runtimeName;
         }
@@ -78,6 +84,9 @@ namespace Org.Apache.REEF.Driver.Evaluator
 
         [DataMember]
         public string Rack { get; private set; }
+
+        [DataMember]
+        public string NodeName { get; private set; }
 
         [DataMember]
         public string EvaluatorBatchId { get; private set; }

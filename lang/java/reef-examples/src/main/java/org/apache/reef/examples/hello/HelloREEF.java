@@ -44,7 +44,7 @@ public final class HelloREEF {
   /**
    * Number of milliseconds to wait for the job to complete.
    */
-  private static final int JOB_TIMEOUT = 10000; // 10 sec.
+  private static final int JOB_TIMEOUT = 20000; // 20 sec.
 
 
   /**

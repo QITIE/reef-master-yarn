@@ -108,7 +108,7 @@ namespace Org.Apache.REEF.Utilities.Runtime.Yarn
             if (useHttps == null)
             {
                 var httpPolicyStr = GetString(YARNHttpPolicyKey, HttpConfig.HttpOnlyPolicy);
-                _useHttps = !httpPolicyStr.Equals(HttpConfig.HttpOnlyPolicy);
+                _useHttps = httpPolicyStr.Equals(HttpConfig.HttpsOnlyPolicy);
             }
             else
             {
@@ -123,6 +123,8 @@ namespace Org.Apache.REEF.Utilities.Runtime.Yarn
 
                 _useHttps = useHttps.Value;
             }
+
+            Console.WriteLine("_useHttps = " + _useHttps);
         }
 
         /// <summary>
@@ -130,6 +132,8 @@ namespace Org.Apache.REEF.Utilities.Runtime.Yarn
         /// </summary>
         public IEnumerable<Uri> GetYarnRMWebappEndpoints()
         {
+            Console.WriteLine(Environment.StackTrace);
+
             if (GetBool(RMHaEnabled))
             {
                 var rmIds = GetStrings(RMHaIds);
@@ -146,6 +150,8 @@ namespace Org.Apache.REEF.Utilities.Runtime.Yarn
                     var rmWebAppAddressProperty = rmAddrPropertyToUse + "." + rmId;
                     bool isFound;
                     var rmWebAppAddressNodeText = GetString(rmWebAppAddressProperty, out isFound);
+                    Console.WriteLine("rmWebAppAddressNodeText = " + rmWebAppAddressNodeText);
+
                     if (!isFound)
                     {
                         continue;
@@ -177,6 +183,7 @@ namespace Org.Apache.REEF.Utilities.Runtime.Yarn
             {
                 throw new ApplicationException("Unable to find RM Webapp Address from yarn-site.xml.");
             }
+            Console.WriteLine("rmAddressNodeText = " + rmAddressNodeText);
 
             return new[] { UriFromString(rmAddressNodeText) };
         }

@@ -43,6 +43,11 @@ namespace Org.Apache.REEF.Driver.Evaluator
         string Rack { get; }
 
         /// <summary>
+        /// The desired node name for the Evaluator to be allocated in.
+        /// </summary>
+        string NodeName { get; }
+
+        /// <summary>
         /// The batch ID for requested evaluators. Evaluators requested in the same batch
         /// will have the same Batch ID.
         /// </summary>

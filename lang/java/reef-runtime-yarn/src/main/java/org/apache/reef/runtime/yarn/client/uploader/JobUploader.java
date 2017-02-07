@@ -22,7 +22,10 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.yarn.conf.YarnConfiguration;
 import org.apache.reef.runtime.yarn.driver.JobSubmissionDirectoryProvider;
+import org.apache.reef.runtime.yarn.util.YarnUtilities;
+
 import javax.inject.Inject;
+
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +44,7 @@ public final class JobUploader {
   JobUploader(final YarnConfiguration yarnConfiguration,
               final JobSubmissionDirectoryProvider jobSubmissionDirectoryProvider) throws IOException {
     this.jobSubmissionDirectoryProvider = jobSubmissionDirectoryProvider;
+    YarnUtilities.setDefaultFS(yarnConfiguration);
     this.fileSystem = FileSystem.get(yarnConfiguration);
   }
 

@@ -29,6 +29,7 @@ import org.apache.hadoop.yarn.conf.YarnConfiguration;
 import org.apache.hadoop.yarn.util.ConverterUtils;
 import org.apache.hadoop.yarn.util.Records;
 import org.apache.reef.runtime.yarn.driver.parameters.JobSubmissionDirectory;
+import org.apache.reef.runtime.yarn.util.YarnUtilities;
 import org.apache.reef.tang.annotations.Parameter;
 
 import javax.inject.Inject;
@@ -56,6 +57,7 @@ final class UploaderToJobFolder {
   UploaderToJobFolder(@Parameter(JobSubmissionDirectory.class) final String jobSubmissionDirectory,
                       final YarnConfiguration yarnConfiguration) throws IOException {
     this.jobSubmissionDirectory = jobSubmissionDirectory;
+    YarnUtilities.setDefaultFS(yarnConfiguration);
     this.fileSystem = FileSystem.get(yarnConfiguration);
   }
 

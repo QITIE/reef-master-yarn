@@ -92,10 +92,12 @@ public final class EvaluatorRequestorImpl implements EvaluatorRequestor {
           break;
         }
         relaxLocality = false;
+        LOG.log(Level.INFO, "set relaxLocality becuase rack name is set");
       }
     }
     // if the user specified any node, then we assume they do not want to relax locality
     if (!req.getNodeNames().isEmpty()) {
+      LOG.log(Level.INFO, "set relaxLocality becuase user node is set");
       relaxLocality = false;
     }
 

@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.reef.annotations.audience.Interop;
 import org.apache.reef.annotations.audience.Private;
 import org.apache.reef.driver.evaluator.EvaluatorRequest;
+import org.apache.reef.driver.evaluator.EvaluatorRequest.Builder;
 import org.apache.reef.driver.evaluator.EvaluatorRequestor;
 import org.apache.reef.javabridge.avro.DefinedRuntimes;
 import org.apache.reef.javabridge.utils.DefinedRuntimesSerializer;
@@ -67,6 +68,7 @@ public final class EvaluatorRequestorBridge extends NativeBridge {
                      final int memory,
                      final int virtualCore,
                      final String rack,
+                     final String node,
                      final String runtimeName) {
     if (this.isBlocked) {
       throw new RuntimeException("Cannot request additional Evaluator, this is probably because " +
@@ -79,14 +81,23 @@ public final class EvaluatorRequestorBridge extends NativeBridge {
 
     try (final LoggingScope ls = loggingScopeFactory.evaluatorRequestSubmitToJavaDriver(evaluatorsNumber)) {
       clrEvaluatorsNumber += evaluatorsNumber;
-
-      final EvaluatorRequest request = EvaluatorRequest.newBuilder()
-          .setNumber(evaluatorsNumber)
-          .setMemory(memory)
-          .setNumberOfCores(virtualCore)
-          .setRuntimeName(runtimeName)
-          .build();
-
+       Builder rb = EvaluatorRequest.newBuilder()
+              .setNumber(evaluatorsNumber)
+              .setMemory(memory)
+              .setNumberOfCores(virtualCore)
+              .setRuntimeName(runtimeName);
+       
+      if (node != null && !node.isEmpty()) {
+    	  	String[] nodes = node.split(",");
+    	  	if (nodes != null)
+    	  	{
+	          for (int i=0; i<nodes.length; i++)
+	          {
+	        	  rb.addNodeName(nodes[i]);
+	          }
+    	  	}
+          }
+      EvaluatorRequest request = rb.build();
       LOG.log(Level.FINE, "submitting evaluator request {0}", request);
       jevaluatorRequestor.submit(request);
     }

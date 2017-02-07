@@ -105,7 +105,7 @@ namespace Org.Apache.REEF.Evaluator.Tests
             var taskClassHierarchy = TangFactory.GetTang().GetClassHierarchy(new string[]
             {
                 typeof(ITask).Assembly.GetName().Name,
-                typeof(HelloTask).Assembly.GetName().Name
+                typeof(JavaTask).Assembly.GetName().Name
             });
 
             var taskConfig = serializer.FromString(taskConfigString, taskClassHierarchy);
@@ -129,7 +129,7 @@ namespace Org.Apache.REEF.Evaluator.Tests
             var taskId = taskInjector.GetNamedInstance<TaskConfigurationOptions.Identifier, string>();
             var task = taskInjector.GetInstance<ITask>();
             Assert.True(taskId.StartsWith("HelloTask"));
-            Assert.True(task is HelloTask);
+            Assert.True(task is JavaTask);
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Org.Apache.REEF.Evaluator.Tests
 
             var taskConfiguration = TaskConfiguration.ConfigurationModule
                 .Set(TaskConfiguration.Identifier, "HelloTask")
-                .Set(TaskConfiguration.Task, GenericType<HelloTask>.Class)
+                .Set(TaskConfiguration.Task, GenericType<JavaTask>.Class)
                 .Build();
             var taskString = serializer.ToString(taskConfiguration);
             configurationEntries.Add(

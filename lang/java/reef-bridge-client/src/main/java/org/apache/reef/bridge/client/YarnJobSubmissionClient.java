@@ -41,6 +41,7 @@ import org.apache.reef.runtime.yarn.client.uploader.JobFolder;
 import org.apache.reef.runtime.yarn.client.uploader.JobUploader;
 import org.apache.reef.runtime.yarn.driver.parameters.JobSubmissionDirectoryPrefix;
 import org.apache.reef.runtime.yarn.util.YarnConfigurationConstructor;
+import org.apache.reef.runtime.yarn.util.YarnUtilities;
 import org.apache.reef.tang.Configuration;
 import org.apache.reef.tang.Tang;
 import org.apache.reef.tang.annotations.Parameter;
@@ -169,10 +170,16 @@ public final class YarnJobSubmissionClient {
     final String securityTokenPasswordFile = fileNames.getSecurityTokenPasswordFile();
     final Text tokenKind = new Text(yarnSubmission.getTokenKind());
     final Text tokenService = new Text(yarnSubmission.getTokenService());
+    final Text tokenKind2 = new Text("TrustedApplicationTokenIdentifier");
+    final Text tokenService2 = new Text("TrustedApplicationTokenIdentifier");
     byte[] identifier = Files.readAllBytes(Paths.get(securityTokenIdentifierFile));
     byte[] password = Files.readAllBytes(Paths.get(securityTokenPasswordFile));
     Token token = new Token(identifier, password, tokenKind, tokenService);
     currentUser.addToken(token);
+    byte[] identifier2 = Files.readAllBytes(Paths.get("SecurityTokenId2"));
+    byte[] password2 = Files.readAllBytes(Paths.get("SecurityTokenPwd2"));
+    Token token2 = new Token(identifier2, password2, tokenKind2, tokenService2);
+    currentUser.addToken(token2);
   }
 
   /**
@@ -185,6 +192,7 @@ public final class YarnJobSubmissionClient {
   private void writeDriverHttpEndPoint(final File driverFolder,
                                        final String applicationId,
                                        final Path dfsPath) throws  IOException {
+    YarnUtilities.setDefaultFS(this.yarnConfiguration);
     final FileSystem fs = FileSystem.get(yarnConfiguration);
     final Path httpEndpointPath = new Path(dfsPath, fileNames.getDriverHttpEndpoint());
 
@@ -205,7 +213,7 @@ public final class YarnJobSubmissionClient {
         // the for-loop waits until the actual content of file is written completely
       }
       try{
-        Thread.sleep(1000);
+        Thread.sleep(10000);
       } catch(InterruptedException ex2) {
         break;
       }

@@ -122,7 +122,7 @@ namespace Org.Apache.REEF.Common.Runtime.Evaluator.Task
                 }
                 catch (Exception e)
                 {
-                    Logger.Log(Level.Info, "TaskRuntime::Exception {0}", e.GetType());
+                    Logger.Log(Level.Info, "TaskRuntime::Exception {0}", e.StackTrace);
                     _currentStatus.SetException(e);
                 }
                 finally

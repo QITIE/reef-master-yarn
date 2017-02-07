@@ -41,7 +41,7 @@ public final class HelloREEFYarn {
    * Setting to 100 sec because running on RM HA clusters take around
    * 50 seconds to set the job to running.
    */
-  private static final int JOB_TIMEOUT = 100000; // 100 sec.
+  private static final int JOB_TIMEOUT = 300000; // 100 sec.
 
   /**
    * @return the configuration of the runtime
