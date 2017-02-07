@@ -1,0 +1,12 @@
+# Checkout all files with CRLF
+* text eol=crlf
+
+# Except binary files
+*.png binary
+*.jpg binary
+*.snk binary
+*.ico binary
+*.bin binary
+
+# Treat Visual Studio solution files as binary
+*.sln binary

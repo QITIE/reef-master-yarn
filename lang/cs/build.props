@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Common build paths -->
+  <PropertyGroup>
+    <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x64</PlatformTarget>
+    <BinDir Condition="$(BinDir) == '' Or $(BinDir) == '*Undefined*'">$(SolutionDir)\bin</BinDir>
+    <PackagesDir Condition="$(PackagesDir) == '' Or $(PackagesDir) == '*Undefined*'">$(SolutionDir)\packages</PackagesDir>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <OutputPath>$(BinDir)\$(Platform)\$(Configuration)\$(RootNamespace)</OutputPath>
+    <BaseIntermediateOutputPath>$(BinDir)\Temp\$(RootNamespace)\$(Platform)\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)$(Configuration)\</IntermediateOutputPath>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(SolutionDir)\keyfile.snk</AssemblyOriginatorKeyFile>
+    <StyleCopTreatErrorsAsWarnings>false</StyleCopTreatErrorsAsWarnings>
+    <BuildDotPropsIsImported>true</BuildDotPropsIsImported>
+  </PropertyGroup>
+
+  <!-- Common build configurations -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <BuildPackage>true</BuildPackage>
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+  </PropertyGroup>
+
+  <!-- REEF NuGet properties -->
+  <PropertyGroup>
+    <IsSnapshot>true</IsSnapshot>
+    <SnapshotNumber>06</SnapshotNumber>
+    <PushPackages>false</PushPackages>
+    <NuGetRepository>https://www.nuget.org</NuGetRepository>
+    <NuGetError>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</NuGetError>
+  </PropertyGroup>
+
+  <!-- Package versions -->
+  <PropertyGroup>
+    <AvroVersion>1.5.6</AvroVersion>
+    <NewtonsoftJsonVersion>8.0.3</NewtonsoftJsonVersion>
+    <ProtobufVersion>2.0.0.668</ProtobufVersion>
+    <RxVersion>2.2.5</RxVersion>
+    <StyleCopVersion>4.7.49.1</StyleCopVersion>
+    <NSubstituteVersion>1.8.2.0</NSubstituteVersion>
+  </PropertyGroup>
+
+  <!-- Locations -->
+  <PropertyGroup>
+    <!--The root directory of the REEF source tree. -->
+    <REEF_Source_Folder>$([System.IO.Path]::GetFullPath($(MSBuildProjectDirectory)\..\..\..))</REEF_Source_Folder>
+  </PropertyGroup>
+</Project>

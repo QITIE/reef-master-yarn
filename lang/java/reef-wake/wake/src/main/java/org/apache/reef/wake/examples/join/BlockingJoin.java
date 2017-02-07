@@ -1,0 +1,99 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package org.apache.reef.wake.examples.join;
+
+import org.apache.reef.wake.rx.Observer;
+import org.apache.reef.wake.rx.StaticObservable;
+
+import java.util.concurrent.ConcurrentSkipListSet;
+
+/**
+ * Blocking join.
+ */
+public class BlockingJoin implements StaticObservable {
+  private final Observer<TupleEvent> out;
+  private final ConcurrentSkipListSet<TupleEvent> left = new ConcurrentSkipListSet<>();
+  private boolean leftDone = false;
+
+  public BlockingJoin(final Observer<TupleEvent> out) {
+    this.out = out;
+  }
+
+  private synchronized void tellEveryoneLeftIsDone() {
+    leftDone = true;
+    notifyAll();
+  }
+
+  private synchronized void waitUntilLeftIsDone() {
+    while (!leftDone) {
+      try {
+        wait();
+      } catch (final InterruptedException e) {
+        throw new IllegalStateException(
+            "No support for interrupted threads here!", e);
+      }
+    }
+  }
+
+  public Observer<TupleEvent> wireLeft() {
+    return new Observer<TupleEvent>() {
+
+      @Override
+      public void onNext(final TupleEvent value) {
+        left.add(value);
+      }
+
+      @Override
+      public void onError(final Exception error) {
+
+      }
+
+      @Override
+      public void onCompleted() {
+        tellEveryoneLeftIsDone();
+      }
+
+    };
+  }
+
+  public Observer<TupleEvent> wireRight() {
+    return new Observer<TupleEvent>() {
+
+      @Override
+      public void onNext(final TupleEvent value) {
+        if (!leftDone) {
+          waitUntilLeftIsDone();
+        }
+        if (left.contains(value)) {
+          out.onNext(value);
+        }
+      }
+
+      @Override
+      public void onError(final Exception error) {
+      }
+
+      @Override
+      public void onCompleted() {
+        waitUntilLeftIsDone();
+        out.onCompleted();
+      }
+    };
+  }
+}
